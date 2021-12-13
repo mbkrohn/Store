@@ -9,17 +9,18 @@ import UIKit
 
 struct Auth{
     
-    enum AuthValues :String {
+    enum AuthVals :String {
         case firstname
         case lastname
         case username
         case password
+        case userRegistered
     }
     
-    let postRegister = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
-    let postLogin = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
-    let getProducts = "https://balink-ios-learning.herokuapp.com/api/v1/products"
-    let postCreateBasket = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
+    let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
+    let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
+    let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
+    let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
     
 //    {
@@ -34,28 +35,32 @@ struct Auth{
 
     var tokenTime : Date
     
-    func isValidUser()->bool{
-        return true
+    func HasRegistered()->Bool{
+        return
     }
     
-    func registerp(newusername uname: String, firstName fname :String, lastname lname:String, password pwd : String ) ->bool{
+    func register(newusername uname: String, firstName fname :String, lastname lname:String, password pwd : String){
+        sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
+                                               AuthVals.lastname.rawValue:lname,
+                                               AuthVals.username.rawValue:uname,
+                                               AuthVals.password.rawValue:pwd])
         
+        UserDefaults.standard.set(true, forKey: AuthVals.userRegistered.rawValue)
     }
     
-    func login(username uname: Stringpassword pwd : String ) ->Bool{
-        
+    func login(username uname: String, password pwd : String ){
+        sendRequest(url: loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
     }
     
     func isValidPassword(password pwd : String)->Bool {
         return true
     }
     
-    func sendRequest(_ urlString: String, values params: [String:String]){
+    func sendRequest(url urlString: String, values params: [String:String]){
         
         let url = URL(string: urlString)
-            
         
-        guard let requestUrl = url else { fatalError("Failed building url") }
+        guard let requestUrl = url else { return fatalError() }
         // Prepare URL Request Object
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
