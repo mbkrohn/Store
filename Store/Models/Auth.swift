@@ -14,8 +14,8 @@ struct Auth{
         case lastname
         case username
         case password
-        case userRegistered
-        case userToken
+        case userIsRegistered
+        case usersToken
         case tokenExpiration
     }
     
@@ -24,29 +24,15 @@ struct Auth{
     let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
     let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
-    
-//    {
-//      "firstname": "Elie",
-//      "lastname": "Drai",
-//      "username": "john.drai@gmail.com",
-//      "password": "this.is.a.password"
-//    }
-//
-
-    var token : String?
-
-    var tokenTime : Date
-    
     func HasRegistered()->Bool{
-        return
+        return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
     }
     
     func register(newusername uname: String, firstName fname :String, lastname lname:String, password pwd : String){
-        let requestStatus = sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
+        sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
                                                AuthVals.lastname.rawValue:lname,
                                                AuthVals.username.rawValue:uname,
                                                AuthVals.password.rawValue:pwd])
-        
     }
     
     func login(username uname: String, password pwd : String ){
@@ -61,46 +47,49 @@ struct Auth{
         
         let url = URL(string: urlString)
         
-        guard let requestUrl = url else { return fatalError() }
+        guard let requestUrl = url else {fatalError()}
         // Prepare URL Request Object
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
          
         // Build the body of the request
-        var postString = ""
-        for param in params.keys {
-            postString += String("\(param)=\(params[param])&")
-        }
-        
+        let body = params.map{ $0.0 + "=" + $0.1 }.joined(separator: "&")
+        	
         // Set HTTP Request Body
-        request.httpBody = postString.data(using: String.Encoding.utf8);
+        request.httpBody = body.data(using: String.Encoding.utf8);
         // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: request) { (data, response, error) in
                 
-                // Check for Error
-                if let error = error {
-                    print("Error took place \(error)")
-                    return
+            // Check for Error
+            if let error = error {
+                print("Error while sending request: \(error)")
+                return
+            }
+            
+            if let safeData = data {
+                do {
+                    let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
+                    SaveTokenToDefaults(token)
+                } catch {
+                    print("Error while trying to decode token: \(error)")
                 }
-         
-            if let token = JSONDecoder.decode(AccessToken.self, from: response){
-                SaveTokenToDefaults(token)
-                
+            }
         }
         task.resume()
     }
         
-        
-        func SaveTokenToDefaults(_ token:String){
-            UserDefaults.standard.set(true, forKey: AuthVals.userRegistered.rawValue)
-            UserDefaults.standard.set(token, forKey: AuthVals.userToken.rawValue)
-            UserDefaults.standard.set(Date().addingTimeInterval(10*60), forKey: AuthVals.tokenExpiration.rawValue)
-        }
-
+    func SaveTokenToDefaults(_ token : AccessToken){
+        UserDefaults.standard.set(true, forKey: AuthVals.userIsRegistered.rawValue)
+        UserDefaults.standard.set(token.access_token, forKey: AuthVals.usersToken.rawValue)
+        UserDefaults.standard.set(Date().addingTimeInterval(10*60), forKey: AuthVals.tokenExpiration.rawValue)
+    }
 }
+    
+struct AccessToken : Codable {
+        let access_token : String
+}
+
 
     
     
-class AccessToken : Decodable {
-    access_token : String
-}
