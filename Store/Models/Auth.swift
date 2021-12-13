@@ -15,6 +15,8 @@ struct Auth{
         case username
         case password
         case userRegistered
+        case userToken
+        case tokenExpiration
     }
     
     let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
@@ -40,12 +42,11 @@ struct Auth{
     }
     
     func register(newusername uname: String, firstName fname :String, lastname lname:String, password pwd : String){
-        sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
+        let requestStatus = sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
                                                AuthVals.lastname.rawValue:lname,
                                                AuthVals.username.rawValue:uname,
                                                AuthVals.password.rawValue:pwd])
         
-        UserDefaults.standard.set(true, forKey: AuthVals.userRegistered.rawValue)
     }
     
     func login(username uname: String, password pwd : String ){
@@ -82,16 +83,18 @@ struct Auth{
                     return
                 }
          
-            if let token = JSONDecoder.decode(AccessToken.self, from: data){
+            if let token = JSONDecoder.decode(AccessToken.self, from: response){
                 SaveTokenToDefaults(token)
+                
         }
         task.resume()
     }
         
         
-        func SaveTokenToDefaults(token){
-            UserDefaults.standard.set(token, forKey: "UserToken")
-            UserDefaults.standard.set(token, forKey: "UserToken")
+        func SaveTokenToDefaults(_ token:String){
+            UserDefaults.standard.set(true, forKey: AuthVals.userRegistered.rawValue)
+            UserDefaults.standard.set(token, forKey: AuthVals.userToken.rawValue)
+            UserDefaults.standard.set(Date().addingTimeInterval(10*60), forKey: AuthVals.tokenExpiration.rawValue)
         }
 
 }
