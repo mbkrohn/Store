@@ -31,7 +31,7 @@ class ProductsStore{
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-         request.addValue("Bearer \(Auth.tokenId)", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(Auth.tokenId)", forHTTPHeaderField: "Authorization")
         
         
         let session = URLSession(configuration: .default)

@@ -9,13 +9,27 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
+    @IBOutlet weak var firstNameLabel: UILabel!
+    @IBOutlet weak var lastNameLabel: UILabel!
+    @IBOutlet weak var userNameLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        populateLabels()
     }
     
 
+    @IBAction func logoutPressed(_ sender: UIButton) {
+        Auth().logout()
+        populateLabels()
+    }
+    
+    
+    func populateLabels(){
+        firstNameLabel.text = "First name: \(Auth.firstName)"
+        lastNameLabel.text = "Last name: \(Auth.lastName)"
+        userNameLabel.text = "User name: \(Auth.userName)"
+    }
     /*
     // MARK: - Navigation
 
