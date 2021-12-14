@@ -5,7 +5,7 @@
 //  Created by BA Link Ltd on 13/12/2021.
 //
 
-import UIKit
+import Foundation
 
 struct Auth{
     
@@ -22,8 +22,6 @@ struct Auth{
     
     let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
     let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
-    let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
-    let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
     func HasRegistered()->Bool{
         return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
