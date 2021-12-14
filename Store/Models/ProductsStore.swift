@@ -23,11 +23,7 @@ struct ProductsStore{
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        
-        
-        
-        //request.setValue(authorizationKey, forHTTPHeaderField: "Authorization")
-        request.addValue("Basic  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4uZG9lQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6IkpvaG4iLCJsYXN0bmFtZSI6IkpvaG4iLCJpYXQiOjE2Mzk0ODM2ODF9.oke_d_y4Lxjjj-ENWqqmDUl45szRsRXLxP6lhOcyYRY", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(tokenId)", forHTTPHeaderField: "Authorization")
         
         
         let session = URLSession(configuration: .default)
