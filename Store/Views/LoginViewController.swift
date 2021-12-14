@@ -9,6 +9,11 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var errorMessageLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -16,6 +21,16 @@ class LoginViewController: UIViewController {
     }
     
 
+    @IBAction func loginPressed(_ sender: UIButton) {
+        if let userName = usernameTextField.text, let password = passwordTextField.text {
+            let auth = Auth()
+            if !auth.login(username: userName, password: password){
+                errorMessageLabel.text = "Login failed"
+            }
+        }
+            
+    }
+    
     /*
     // MARK: - Navigation
 

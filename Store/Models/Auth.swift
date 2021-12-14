@@ -19,6 +19,7 @@ struct Auth{
         case tokenExpiration
     }
     
+    
     let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
     let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
     let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
@@ -28,41 +29,49 @@ struct Auth{
         return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
     }
     
-    func register(newusername uname: String, firstName fname :String, lastname lname:String, password pwd : String){
-        sendRequest(url: registerUrl, values: [AuthVals.firstname.rawValue:fname,
-                                               AuthVals.lastname.rawValue:lname,
-                                               AuthVals.username.rawValue:uname,
-                                               AuthVals.password.rawValue:pwd])
+    func register(firstName fname :String, lastname lname:String,username uname: String, password pwd : String)-> Bool{
+        let request = createRequest(url: registerUrl,
+                                    values: [AuthVals.firstname.rawValue:fname,
+                                             AuthVals.lastname.rawValue:lname,
+                                             AuthVals.username.rawValue:uname,
+                                             AuthVals.password.rawValue:pwd])
+        return sendRequest(with: request)
     }
     
-    func login(username uname: String, password pwd : String ){
-        sendRequest(url: loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
+    func login(username uname: String, password pwd : String )->Bool{
+        let request = createRequest(url: loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
+        return sendRequest(with: request)
     }
     
     func isValidPassword(password pwd : String)->Bool {
         return true
     }
     
-    func sendRequest(url urlString: String, values params: [String:String]){
+    fileprivate func createRequest(url urlString: String, values params: [String:String])->URLRequest{
         
         let url = URL(string: urlString)
         
         guard let requestUrl = url else {fatalError()}
-        // Prepare URL Request Object
+        
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
          
-        // Build the body of the request
         let body = params.map{ $0.0 + "=" + $0.1 }.joined(separator: "&")
-        	
-        // Set HTTP Request Body
+        print(body)
+            
         request.httpBody = body.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
+        return request
+    }
+    
+    
+    fileprivate func sendRequest(with request :URLRequest) -> Bool{
+        var result = true
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
                 
             // Check for Error
             if let error = error {
+                result = false
                 print("Error while sending request: \(error)")
                 return
             }
@@ -71,12 +80,14 @@ struct Auth{
                 do {
                     let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
                     SaveTokenToDefaults(token)
+                    result = true
                 } catch {
                     print("Error while trying to decode token: \(error)")
                 }
             }
         }
         task.resume()
+        return result
     }
         
     func SaveTokenToDefaults(_ token : AccessToken){
@@ -86,7 +97,7 @@ struct Auth{
     }
 }
     
-struct AccessToken : Codable {
+struct AccessToken : Decodable {
         let access_token : String
 }
 

@@ -9,6 +9,11 @@ import UIKit
 
 class RegisterViewController: UIViewController {
 
+    @IBOutlet weak var firstnameTextField: UITextField!
+    @IBOutlet weak var lastnameTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -16,6 +21,16 @@ class RegisterViewController: UIViewController {
     }
     
 
+    @IBAction func registerPressed(_ sender: UIButton) {
+        if let firstname = firstnameTextField.text, let lastname = lastnameTextField.text, let username = usernameTextField.text, let password = passwordTextField.text {
+                
+            let auth = Auth()
+            auth.register(firstName: firstname, lastname: lastname, username: username, password: password)
+            
+        }
+        
+        
+    }
     /*
     // MARK: - Navigation
 
