@@ -7,29 +7,35 @@
 
 import Foundation
 
-struct ProductsStore{
+class ProductsStore{
     
-    let tokenId = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4uZG9lQGdtYWlsLmNvbSIsImZpcnN0bmFtZSI6IkpvaG4iLCJsYXN0bmFtZSI6IkpvaG4iLCJpYXQiOjE2Mzk0ODM2ODF9.oke_d_y4Lxjjj-ENWqqmDUl45szRsRXLxP6lhOcyYRY"
+    var products : [String:[Product]]?
+    
+    
     
     let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
     let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
-    func requestProducts(){
+    
+    func arrangeProductsByType(productList allProducts: [Product]){
+        for product in allProducts {
+            products?[product.type]?.append(product)
+        }
+    }
 
+    
+     func requestProducts(){
         let url = URL(string: productsUrl)
         
         guard let url = url else {fatalError()}
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        
-        request.addValue("Bearer \(tokenId)", forHTTPHeaderField: "Authorization")
+         request.addValue("Bearer \(Auth.tokenId)", forHTTPHeaderField: "Authorization")
         
         
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
-                
-            // Check for Error
             if let error = error {
                 print("Error while sending products request: \(error)")
                 return
@@ -37,8 +43,8 @@ struct ProductsStore{
             
             if let safeData = data {
                 do {
-                    let products = try JSONDecoder().decode([Product].self, from: safeData)
-                    print(products)
+                    let allProducts = try JSONDecoder().decode([Product].self, from: safeData)
+                    self.arrangeProductsByType(productList: allProducts)
                 } catch {
                     print("Error while trying to decode products: \(error)")
                 }
@@ -47,11 +53,12 @@ struct ProductsStore{
         task.resume()
     }
     
+    
+    
+    
+    
 }
 
-struct Products : Codable {
-    let product : [Product]
-}
 
 struct Product: Codable {
     let id : String

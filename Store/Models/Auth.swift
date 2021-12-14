@@ -23,6 +23,24 @@ struct Auth{
     let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
     let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
     
+    static var tokenId: String {
+                get {
+                    
+                    if let token = UserDefaults.standard.string(forKey: AuthVals.usersToken.rawValue),
+                       let expire = (UserDefaults.standard.object(forKey: AuthVals.tokenExpiration.rawValue) as! Date?) {
+                        
+                        if expire > Date(){
+                            return token
+                        }
+                    }
+                    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiY2QiLCJmaXJzdG5hbWUiOiJNb3NoZSIsImxhc3RuYW1lIjoiTW9zaGUiLCJpYXQiOjE2Mzk0OTgzNTB9.EUeuz2Yu5fc-UnW1d49AtPSXPF7gHERKO2L8CBbpTfg"
+                }
+                set(newToken) {
+                    UserDefaults.standard.set(newToken, forKey: AuthVals.usersToken.rawValue)
+                    UserDefaults.standard.set(Date()+(60*10), forKey: AuthVals.tokenExpiration.rawValue)
+                }
+            }
+    
     func HasRegistered()->Bool{
         return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
     }
