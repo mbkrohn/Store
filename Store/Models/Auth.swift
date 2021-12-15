@@ -154,31 +154,38 @@ struct Auth{
             
 //            print("type of response: \(type(of: response))")
             
-            let res = response as! HTTPURLResponse
-            
             // Check for Error
             if let error = error {
                 print("Error while sending request: \(error)")
                 return
             }
 
-            if let safeData = data {
-                do {
-                    let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
-                    Auth.tokenId = token.access_token
-                    DispatchQueue.main.async {
-                        sender.performSegue(withIdentifier: segueId, sender: sender)
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            if isValidStatusCode(statusCode) {
+                if let safeData = data {
+                    do {
+                        let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
+                        Auth.tokenId = token.access_token
+                        DispatchQueue.main.async {
+                            sender.performSegue(withIdentifier: segueId, sender: sender)
+                        }
+                    } catch {
+                        print("Error while trying to decode token: \(error)")
                     }
-                } catch {
-                    print("Error while trying to decode token: \(error)")
                 }
+            } else{
+                print("Error occured \(statusCode)")
             }
+            
+            
+            
+            
         }
         task.resume()
     }
     
     
-    fileprivate func manageStatusCodes(statucCode: Int)-> Bool{
+    fileprivate func isValidStatusCode(statucCode: Int)-> Bool{
         switch statucCode{
         case 200..<299:
             return true
