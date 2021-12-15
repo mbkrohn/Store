@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B4530706276A04FA00B6E692 /* Basket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4530705276A04F900B6E692 /* Basket.swift */; };
 		B47114DA2767514E00745682 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47114D92767514E00745682 /* AppDelegate.swift */; };
 		B47114DC2767514E00745682 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47114DB2767514E00745682 /* SceneDelegate.swift */; };
 		B47114E12767514E00745682 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B47114DF2767514E00745682 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B4530705276A04F900B6E692 /* Basket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Basket.swift; sourceTree = "<group>"; };
 		B47114D62767514D00745682 /* Store.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Store.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B47114D92767514E00745682 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B47114DB2767514E00745682 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				B47115032767655400745682 /* Auth.swift */,
 				F0BBC1C42767EEDF003A269A /* AccessToken.swift */,
 				B47115052768B87000745682 /* ProductsStore.swift */,
+				B4530705276A04F900B6E692 /* Basket.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 				B47114FA276758A700745682 /* LoginViewController.swift in Sources */,
 				B47115042767655400745682 /* Auth.swift in Sources */,
 				B47114DA2767514E00745682 /* AppDelegate.swift in Sources */,
+				B4530706276A04FA00B6E692 /* Basket.swift in Sources */,
 				B4711500276759B900745682 /* ProfileViewController.swift in Sources */,
 				B47114DC2767514E00745682 /* SceneDelegate.swift in Sources */,
 				B47114E42767514E00745682 /* Store.xcdatamodeld in Sources */,

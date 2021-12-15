@@ -25,7 +25,8 @@ class RegisterViewController: UIViewController {
         if let firstname = firstnameTextField.text, let lastname = lastnameTextField.text, let username = usernameTextField.text, let password = passwordTextField.text {
                 
             let auth = Auth()
-            if auth.register(firstName: firstname, lastname: lastname, username: username, password: password) {
+            auth.register(firstName: firstname, lastname: lastname, username: username, password: password, sender: self, segueId: "register2categories" )
+            if Auth.isRegistered {
                 UserDefaults.standard.set(firstname, forKey: Auth.AuthVals.firstname.rawValue)
                 UserDefaults.standard.set(lastname, forKey: Auth.AuthVals.lastname.rawValue)
                 UserDefaults.standard.set(username, forKey: Auth.AuthVals.username.rawValue)

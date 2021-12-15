@@ -24,7 +24,8 @@ class LoginViewController: UIViewController {
     @IBAction func loginPressed(_ sender: UIButton) {
         if let userName = usernameTextField.text, let password = passwordTextField.text {
             let auth = Auth()
-            if !auth.login(username: userName, password: password){
+            auth.login(username: userName, password: password, sender: self, segueId: "login2categories")
+            if !Auth.isLoggedIn {
                 errorMessageLabel.text = "Login failed"
             }
         }

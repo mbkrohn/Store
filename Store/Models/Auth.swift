@@ -5,9 +5,10 @@
 //  Created by BA Link Ltd on 13/12/2021.
 //
 
-import Foundation
+import UIKit
 
 struct Auth{
+// MARK: - Enums
     
     enum AuthVals :String {
         case firstname
@@ -19,8 +20,13 @@ struct Auth{
         case tokenExpiration
     }
     
-    let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
-    let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
+// MARK: - URL's
+
+    static let tokenExpirationMinutes : Double = 10
+    static let registerUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/register"
+    static let loginUrl = "https://balink-ios-learning.herokuapp.com/api/v1/auth/login"
+
+// MARK: - Properties
     
     static var firstName : String {
         get {
@@ -61,61 +67,69 @@ struct Auth{
         }
     }
     
-    static var tokenId: String {
+    static var tokenId: String? {
         get {
-            let fakeToken = false
-            if fakeToken {
-                return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiY2QiLCJmaXJzdG5hbWUiOiJNb3NoZSIsImxhc3RuYW1lIjoiTW9zaGUiLCJpYXQiOjE2Mzk1MTA4NjR9.Zxw1O8ulczHuX3RpsATnnrMtQnQFaEn5dgxJqA8G-iw"
-            }
-            if let token = UserDefaults.standard.string(forKey: AuthVals.usersToken.rawValue),
-               let expire = (UserDefaults.standard.object(forKey: AuthVals.tokenExpiration.rawValue) as! Date?) {
-                
-                if expire > Date(){
-                    return token
-                }
-            }
-            return ""
+            // Verify that there's a token and that it's a valid one.
+            // if not, than remove the token from the UserDefaults and return nil
+            guard let token = UserDefaults.standard.string(forKey: AuthVals.usersToken.rawValue),
+               let expire = (UserDefaults.standard.object(forKey: AuthVals.tokenExpiration.rawValue) as! Date?), expire > Date() else {
+                   UserDefaults.standard.removeObject(forKey: AuthVals.usersToken.rawValue)
+                   UserDefaults.standard.removeObject(forKey: AuthVals.tokenExpiration.rawValue)
+                   return nil
+               }
+            return token
         }
         set {
-            if newValue == "" {
-                UserDefaults.standard.removeObject(forKey: AuthVals.usersToken.rawValue)
-                UserDefaults.standard.removeObject(forKey: AuthVals.tokenExpiration.rawValue)
-            } else {
-                UserDefaults.standard.set(newValue, forKey: AuthVals.usersToken.rawValue)
-                UserDefaults.standard.set(Date()+(60*10), forKey: AuthVals.tokenExpiration.rawValue)
-            }
+            // When setting a new token register its time for 10 minutes
+            UserDefaults.standard.set(newValue, forKey: AuthVals.usersToken.rawValue)
+            UserDefaults.standard.set(Date().addingTimeInterval(Auth.tokenExpirationMinutes * 60), forKey: AuthVals.tokenExpiration.rawValue)
+            UserDefaults.standard.set(true, forKey: AuthVals.userIsRegistered.rawValue)
+
         }
     }
     
+    
     static var isLoggedIn : Bool {
-        return tokenId != ""
+        get {
+            return tokenId != nil
+        }
     }
     
-    func HasRegistered()->Bool{
-        return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
+    static var isRegistered : Bool{
+        get {
+            return UserDefaults.standard.bool(forKey: AuthVals.userIsRegistered.rawValue)
+        }
     }
     
-    func register(firstName fname :String, lastname lname:String,username uname: String, password pwd : String)-> Bool{
-        let request = createRequest(url: registerUrl,
+    
+// MARK: - Methods
+    
+    func register(firstName fname :String, lastname lname:String,username uname: String, password pwd : String, sender:UIViewController, segueId:String){
+        
+        let request = createRequest(url: Auth.registerUrl,
                                     values: [AuthVals.firstname.rawValue:fname,
                                              AuthVals.lastname.rawValue:lname,
                                              AuthVals.username.rawValue:uname,
                                              AuthVals.password.rawValue:pwd])
-        return sendRequest(with: request)
+        sendRequest(with: request, sender:sender, segueId:segueId)
     }
     
-    func login(username uname: String, password pwd : String )->Bool{
-        let request = createRequest(url: loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
-        return sendRequest(with: request)
+    func login(username uname: String, password pwd : String, sender: UIViewController, segueId: String ){
+        let request = createRequest(url: Auth.loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
+        sendRequest(with: request, sender: sender, segueId: segueId)
     }
     
     func logout(){
         Auth.tokenId = ""
     }
     
+    
     func isValidPassword(password pwd : String)->Bool {
         return true
     }
+    
+    
+// MARK: - Private methods
     
     fileprivate func createRequest(url urlString: String, values params: [String:String])->URLRequest{
         
@@ -134,38 +148,48 @@ struct Auth{
     }
     
     
-    fileprivate func sendRequest(with request :URLRequest) -> Bool{
-        var result = true
+    fileprivate func sendRequest(with request :URLRequest, sender: UIViewController, segueId: String){
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
             
+//            print("type of response: \(type(of: response))")
+            
+            let res = response as! HTTPURLResponse
+            
             // Check for Error
             if let error = error {
-                result = false
                 print("Error while sending request: \(error)")
                 return
             }
-            
+
             if let safeData = data {
                 do {
                     let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
-                    SaveTokenToDefaults(token)
-                    result = true
+                    Auth.tokenId = token.access_token
+                    DispatchQueue.main.async {
+                        sender.performSegue(withIdentifier: segueId, sender: sender)
+                    }
                 } catch {
                     print("Error while trying to decode token: \(error)")
                 }
             }
         }
         task.resume()
-        return result
     }
     
-    func SaveTokenToDefaults(_ token : AccessToken){
-        UserDefaults.standard.set(true, forKey: AuthVals.userIsRegistered.rawValue)
-        UserDefaults.standard.set(token.access_token, forKey: AuthVals.usersToken.rawValue)
-        UserDefaults.standard.set(Date().addingTimeInterval(10*60), forKey: AuthVals.tokenExpiration.rawValue)
+    
+    fileprivate func manageStatusCodes(statucCode: Int)-> Bool{
+        switch statucCode{
+        case 200..<299:
+            return true
+        default:
+            return false
+        }
     }
+    
 }
+
+// MARK: -
 
 struct AccessToken : Decodable {
     let access_token : String

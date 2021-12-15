@@ -15,6 +15,7 @@ class CategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        categoriesTableView.dataSource = self
         categories.requestProducts()
 
         // Uncomment the following line to preserve selection between presentations
@@ -31,7 +32,7 @@ extension CategoriesViewController : UITableViewDataSource {
         if let categoryList = categories.products {
             return categoryList.count
         } else {
-            return 0
+            return 2
         }
     }
     
