@@ -9,7 +9,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-
+    let segueId = "login2categories"
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var errorMessageLabel: UILabel!
@@ -34,7 +34,7 @@ class LoginViewController: UIViewController {
     
     func whatever(){
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "login2categories", sender: self)
+            self.performSegue(withIdentifier: self.segueId, sender: self)
         }
         
     }

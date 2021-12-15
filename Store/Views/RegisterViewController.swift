@@ -9,6 +9,8 @@ import UIKit
 
 class RegisterViewController: UIViewController {
 
+    let segueId = "register2categories"
+    
     @IBOutlet weak var firstnameTextField: UITextField!
     @IBOutlet weak var lastnameTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
@@ -38,7 +40,7 @@ class RegisterViewController: UIViewController {
     
     func whatever(){
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "register2categories", sender: self)
+            self.performSegue(withIdentifier: self.segueId, sender: self)
         }
     }
     /*
