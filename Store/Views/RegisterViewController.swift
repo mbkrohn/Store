@@ -25,7 +25,7 @@ class RegisterViewController: UIViewController {
         if let firstname = firstnameTextField.text, let lastname = lastnameTextField.text, let username = usernameTextField.text, let password = passwordTextField.text {
                 
             let auth = Auth()
-            auth.register(firstName: firstname, lastname: lastname, username: username, password: password, sender: self, segueId: "register2categories" )
+            auth.register(firstName: firstname, lastname: lastname, username: username, password: password, actionOnResponse: whatever )
             if Auth.isRegistered {
                 UserDefaults.standard.set(firstname, forKey: Auth.AuthVals.firstname.rawValue)
                 UserDefaults.standard.set(lastname, forKey: Auth.AuthVals.lastname.rawValue)
@@ -33,8 +33,13 @@ class RegisterViewController: UIViewController {
             }
             
         }
-        
-        
+    }
+    
+    
+    func whatever(){
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "register2categories", sender: self)
+        }
     }
     /*
     // MARK: - Navigation

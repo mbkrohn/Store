@@ -104,19 +104,23 @@ struct Auth{
     
 // MARK: - Methods
     
-    func register(firstName fname :String, lastname lname:String,username uname: String, password pwd : String, sender:UIViewController, segueId:String){
+    func register(firstName fname :String, lastname lname:String,
+                  username uname: String, password pwd : String, actionOnResponse: @escaping()->Void){
         
         let request = createRequest(url: Auth.registerUrl,
                                     values: [AuthVals.firstname.rawValue:fname,
                                              AuthVals.lastname.rawValue:lname,
                                              AuthVals.username.rawValue:uname,
                                              AuthVals.password.rawValue:pwd])
-        sendRequest(with: request, sender:sender, segueId:segueId)
+        sendRequest(with: request, actionOnResponse: actionOnResponse)
     }
     
-    func login(username uname: String, password pwd : String, sender: UIViewController, segueId: String ){
-        let request = createRequest(url: Auth.loginUrl, values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
-        sendRequest(with: request, sender: sender, segueId: segueId)
+    func login(username uname: String, password pwd : String, actionOnResponse: @escaping()->Void ){
+
+        let request = createRequest(url: Auth.loginUrl,
+                                    values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
+
+        sendRequest(with: request, actionOnResponse: actionOnResponse)
     }
     
     func logout(){
@@ -148,7 +152,7 @@ struct Auth{
     }
     
     
-    fileprivate func sendRequest(with request :URLRequest, sender: UIViewController, segueId: String){
+    fileprivate func sendRequest(with request :URLRequest, actionOnResponse:@escaping()->Void){
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
             
@@ -161,14 +165,12 @@ struct Auth{
             }
 
             let statusCode = (response as! HTTPURLResponse).statusCode
-            if isValidStatusCode(statusCode) {
+            if isValidStatusCode(statusCode : statusCode) {
                 if let safeData = data {
                     do {
                         let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
                         Auth.tokenId = token.access_token
-                        DispatchQueue.main.async {
-                            sender.performSegue(withIdentifier: segueId, sender: sender)
-                        }
+                        actionOnResponse()
                     } catch {
                         print("Error while trying to decode token: \(error)")
                     }
@@ -185,8 +187,8 @@ struct Auth{
     }
     
     
-    fileprivate func isValidStatusCode(statucCode: Int)-> Bool{
-        switch statucCode{
+    fileprivate func isValidStatusCode(statusCode: Int)-> Bool{
+        switch statusCode{
         case 200..<299:
             return true
         default:
