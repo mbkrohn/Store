@@ -19,6 +19,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         var rootVc : UIViewController
         let rootVcId = !Auth.isRegistered ? "InitialVc": Auth.isLoggedIn ? "MainVc" : "LoginVc"
         
+        print("Registered:\(Auth.isRegistered)")
+        print("Logedin: \(Auth.isLoggedIn)")
+        
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         rootVc = mainStoryboard.instantiateViewController(withIdentifier: rootVcId)
         self.window?.rootViewController = rootVc
@@ -26,12 +29,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        
-        if let tabBarController = self.window!.rootViewController as? UITabBarController {
-            if let tabCount = tabBarController.tabBar.items?.count {
-                tabBarController.selectedIndex = tabCount - 1
-            }
-        }
+//        if let tabBarController = self.window!.rootViewController as? UITabBarController {
+//            if let tabCount = tabBarController.tabBar.items?.count {
+//                tabBarController.selectedIndex = tabCount - 1
+//            }
+//        }
         
         
         //        if Auth.isRegistered()

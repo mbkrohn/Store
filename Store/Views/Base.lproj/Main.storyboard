@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -207,7 +206,7 @@
             </objects>
             <point key="canvasLocation" x="684" y="-778"/>
         </scene>
-        <!--Item-->
+        <!--Favorites-->
         <scene sceneID="f3U-g3-hRB">
             <objects>
                 <tableViewController id="ult-TI-9f5" customClass="FavoritesTableViewController" sceneMemberID="viewController">
@@ -230,7 +229,7 @@
                             <outlet property="delegate" destination="ult-TI-9f5" id="3h4-1a-x3X"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="cart" catalog="system" id="NPp-ib-ql1"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="heart" catalog="system" id="NPp-ib-ql1"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H6V-xC-W1W" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -308,7 +307,7 @@
             </objects>
             <point key="canvasLocation" x="3459" y="-52"/>
         </scene>
-        <!--Item-->
+        <!--Profile-->
         <scene sceneID="5qk-Ht-S4U">
             <objects>
                 <viewController id="DMK-3j-D1R" customClass="ProfileViewController" customModule="Store" customModuleProvider="target" sceneMemberID="viewController">
@@ -367,7 +366,7 @@
                             <constraint firstItem="QNw-vC-Gel" firstAttribute="centerY" secondItem="7Xf-fj-Pl8" secondAttribute="centerY" id="ZmC-05-apA"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="person" catalog="system" id="pUo-Ya-hPZ"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="person" catalog="system" id="pUo-Ya-hPZ"/>
                     <connections>
                         <outlet property="firstNameLabel" destination="w7p-Xd-Cjr" id="pGu-V8-8VA"/>
                         <outlet property="lastNameLabel" destination="ebg-Uv-r5t" id="b4v-Bv-xZ6"/>
@@ -390,22 +389,20 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="ult-TI-9f5" kind="relationship" relationship="viewControllers" id="BRD-RO-Ze5"/>
-                        <segue destination="DMK-3j-D1R" kind="relationship" relationship="viewControllers" id="20x-NV-sn7"/>
                         <segue destination="RVi-OB-34F" kind="relationship" relationship="viewControllers" id="sK9-XS-MTD"/>
+                        <segue destination="DMK-3j-D1R" kind="relationship" relationship="viewControllers" id="20x-NV-sn7"/>
+                        <segue destination="ult-TI-9f5" kind="relationship" relationship="viewControllers" id="BRD-RO-Ze5"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aih-SO-JAv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1054" y="-36"/>
         </scene>
-        <!--Item-->
+        <!--Shop-->
         <scene sceneID="5A4-b3-lJJ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RVi-OB-34F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="4V9-ap-wm0">
-                        <imageReference key="selectedImage" image="text.justify" catalog="system" symbolScale="default"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="Shop" image="cart" catalog="system" id="4V9-ap-wm0"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XSq-Pl-DQx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
@@ -426,8 +423,8 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cart" catalog="system" width="128" height="102"/>
+        <image name="heart" catalog="system" width="128" height="109"/>
         <image name="person" catalog="system" width="128" height="117"/>
-        <image name="text.justify" catalog="system" width="128" height="100"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

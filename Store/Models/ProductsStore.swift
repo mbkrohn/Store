@@ -16,7 +16,16 @@ class ProductsStore{
     
     // MARK: - Properties
     
-    var products : [String:[Product]]?
+    var products : [String:[Product]]?{
+        get{
+            if Auth.isLoggedIn {
+                return products
+            } else {
+                return nil
+            }
+        }
+        set{}
+    }
     
     var categoriesList : [String]{
         get{

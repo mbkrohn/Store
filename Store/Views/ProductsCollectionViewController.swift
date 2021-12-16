@@ -12,7 +12,19 @@ private let reuseIdentifier = "Cell"
 class ProductsCollectionViewController: UICollectionViewController {
 
     var selctedCategory : String?
-    var products : [Product]?
+    var products : [Product]? {
+        get{
+            if Auth.isLoggedIn {
+                return products
+            } else {
+                return nil
+            }
+               
+        }
+        set{}
+        
+                
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,8 +85,8 @@ class ProductsCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //if var cell = collectionView.cellForItem(at: indexPath) as! ProductCollectionCell {
-         //   let heart = cell.heartButton.        }
+        // if var cell = collectionView.cellForItem(at: indexPath) as! ProductCollectionCell {
+        //   let heart = cell.heartButton.        }
     }
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
