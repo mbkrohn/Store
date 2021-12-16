@@ -68,8 +68,14 @@ class ProductsCollectionViewController: UICollectionViewController {
         }
         return nil
     }
+    
+    
     // MARK: UICollectionViewDelegate
 
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        //if var cell = collectionView.cellForItem(at: indexPath) as! ProductCollectionCell {
+         //   let heart = cell.heartButton.        }
+    }
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
     override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {

@@ -17,6 +17,7 @@ class ProductCollectionCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+//        heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
     }
 
 }
