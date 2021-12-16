@@ -66,6 +66,13 @@ class ProductsStore{
     }
     
     
+    func getProducts(forCategory category : String)->[Product]?{
+        if let categoryProducts = products?[category] {
+            return categoryProducts
+        }
+        return nil
+    }
+    
     // MARK: - Private methods
     
     fileprivate func isValidStatusCode(statusCode: Int)-> Bool{
@@ -83,13 +90,14 @@ class ProductsStore{
         // under the right key (key=product.type)
         for product in productsList {
             let productType = product.type ?? "Misc"
-                if var categoryList = products?[productType]{
-                    categoryList.append(product)
+                if products?[productType] != nil {
+                    products?[productType]?.append(product)
                 } else {
                     products?[productType] = [product]
                 }
         }
     }
+    
     
     
     

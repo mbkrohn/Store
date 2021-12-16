@@ -10,16 +10,19 @@ import UIKit
 class LoginViewController: UIViewController {
 
     let segueId = "login2categories"
+    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var errorMessageLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if Auth.isLoggedIn {
+            performSegue(withIdentifier: segueId, sender: self)
+        }
         // Do any additional setup after loading the view.
     }
-    
 
     @IBAction func loginPressed(_ sender: UIButton) {
         if let userName = usernameTextField.text, let password = passwordTextField.text {

@@ -11,49 +11,63 @@ private let reuseIdentifier = "Cell"
 
 class ProductsCollectionViewController: UICollectionViewController {
 
+    var selctedCategory : String?
+    var products : [Product]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        self.title = selctedCategory
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
+// MARK:- UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        if let itemCount = products?.count {
+            return itemCount
+        }
+        return 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ProductCollectionCell
+        
+        if let products = products {
+            let product = products[indexPath.row]
+            cell.backgroundColor = .blue
+            // productImage
+            cell.productImage.image = loadImage(url: product.imageUrl)
+            // Description
+            cell.descriptionLabel.text = product.description
+            // Price
+            cell.priceLabel.text = "\(product.price ?? 0.0)"
+        }
     
         return cell
     }
 
+    
+    func loadImage(url:String?)->UIImage?{
+        
+        guard let url = url, let imageUrl = URL(string: url) else { return nil }
+        
+        let imageData = try! Data(contentsOf: imageUrl)
+        if let image = UIImage(data: imageData){
+            return image
+        }
+        return nil
+    }
     // MARK: UICollectionViewDelegate
 
     /*

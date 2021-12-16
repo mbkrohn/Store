@@ -9,6 +9,11 @@ import UIKit
 
 class CategoriesViewController: UIViewController {
 
+    let segueId = "categories2products"
+    let cellId = "categoryCell"
+    
+    var selectedCategory : String?
+    
     @IBOutlet var categoriesTableView: UITableView!
     var categories = ProductsStore()
     
@@ -36,7 +41,7 @@ extension CategoriesViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.textLabel?.text = categories.categoriesList[indexPath.row]
         return cell
     }
@@ -55,8 +60,18 @@ extension CategoriesViewController : UITableViewDataSource {
 extension CategoriesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if let cell = tableView.cellForRow(at: indexPath), let cellText = cell.textLabel?.text {
+            selectedCategory = cellText
+            performSegue(withIdentifier: segueId, sender: self)
+        }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let productsView = segue.destination as! ProductsCollectionViewController
+        productsView.selctedCategory = selectedCategory
+        if let selectedCategory = selectedCategory {
+            productsView.products = categories.getProducts(forCategory: selectedCategory)
+        }
+    }
 }
 
