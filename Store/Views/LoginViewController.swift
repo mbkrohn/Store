@@ -24,20 +24,23 @@ class LoginViewController: UIViewController {
     @IBAction func loginPressed(_ sender: UIButton) {
         if let userName = usernameTextField.text, let password = passwordTextField.text {
             let auth = Auth()
-            auth.login(username: userName, password: password, actionOnResponse: whatever)
-            if !Auth.isLoggedIn {
-                errorMessageLabel.text = "Login failed"
-            }
+            auth.login(username: userName, password: password, actionOnResponse: {isValidStatus in
+                DispatchQueue.main.async {
+                    if isValidStatus {
+                        self.errorMessageLabel.text = nil
+                        self.performSegue(withIdentifier: self.segueId, sender: self)
+                    } else {
+                        self.errorMessageLabel.text = "Login failed"
+                    }
+                }
+            })
+//            if !Auth.isLoggedIn {
+//                errorMessageLabel.text = "Login failed"
+//            }
         }
             
     }
     
-    func whatever(){
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: self.segueId, sender: self)
-        }
-        
-    }
     
     /*
     // MARK: - Navigation

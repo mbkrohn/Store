@@ -107,6 +107,13 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jKo-ak-Ljd">
+                                <rect key="frame" x="132" y="608" width="150" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemRedColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="pyd-C1-Zo8"/>
                         <color key="backgroundColor" red="0.94966429470000002" green="0.86722105739999999" blue="0.77937257289999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -117,6 +124,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="lQv-o1-Azo"/>
                     <connections>
+                        <outlet property="errorMessageLabel" destination="jKo-ak-Ljd" id="OvN-tg-XKo"/>
                         <outlet property="firstnameTextField" destination="e45-vk-iy9" id="Jml-bT-W4K"/>
                         <outlet property="lastnameTextField" destination="NIk-da-Mtg" id="eRa-JU-c9j"/>
                         <outlet property="passwordTextField" destination="plZ-gV-kcE" id="dRn-yq-SSV"/>

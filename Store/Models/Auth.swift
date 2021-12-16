@@ -105,7 +105,7 @@ struct Auth{
 // MARK: - Methods
     
     func register(firstName fname :String, lastname lname:String,
-                  username uname: String, password pwd : String, actionOnResponse: @escaping()->Void){
+                  username uname: String, password pwd : String, actionOnResponse: @escaping(Bool)->Void){
         
         let request = createRequest(url: Auth.registerUrl,
                                     values: [AuthVals.firstname.rawValue:fname,
@@ -115,7 +115,7 @@ struct Auth{
         sendRequest(with: request, actionOnResponse: actionOnResponse)
     }
     
-    func login(username uname: String, password pwd : String, actionOnResponse: @escaping()->Void ){
+    func login(username uname: String, password pwd : String, actionOnResponse: @escaping(Bool)->Void ){
 
         let request = createRequest(url: Auth.loginUrl,
                                     values: [AuthVals.username.rawValue:uname, AuthVals.password.rawValue:pwd])
@@ -152,7 +152,7 @@ struct Auth{
     }
     
     
-    fileprivate func sendRequest(with request :URLRequest, actionOnResponse:@escaping()->Void){
+    fileprivate func sendRequest(with request :URLRequest, actionOnResponse:@escaping(Bool)->Void){
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { (data, response, error) in
             
@@ -165,12 +165,12 @@ struct Auth{
             }
 
             let statusCode = (response as! HTTPURLResponse).statusCode
-            if isValidStatusCode(statusCode : statusCode) {
+            let isValidStatus = isValidStatusCode(statusCode : statusCode)
+            if isValidStatus {
                 if let safeData = data {
                     do {
                         let token = try JSONDecoder().decode(AccessToken.self, from: safeData)
                         Auth.tokenId = token.access_token
-                        actionOnResponse()
                     } catch {
                         print("Error while trying to decode token: \(error)")
                     }
@@ -178,6 +178,7 @@ struct Auth{
             } else{
                 print("Error occured \(statusCode)")
             }
+            actionOnResponse(isValidStatus)
             
             
             
