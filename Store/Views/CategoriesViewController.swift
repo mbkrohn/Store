@@ -22,15 +22,19 @@ class CategoriesViewController: UIViewController {
         
         categoriesTableView.dataSource = self
         categoriesTableView.delegate = self
-        categories.requestProducts(actionOnResponse: whatever)
-
+        categories.requestProducts(actionOnResponse: {isValidResponse in
+            DispatchQueue.main.async {
+                if(isValidResponse){
+                    self.categoriesTableView.reloadData()
+                }
+            }
+        })
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
 }
 
 //MARK: UITableViewDataSource
@@ -46,14 +50,6 @@ extension CategoriesViewController : UITableViewDataSource {
         return cell
     }
     
-
-    func whatever(isValidStatus: Bool){
-        DispatchQueue.main.async {
-            if(isValidStatus){
-                self.categoriesTableView.reloadData()
-            }
-        }
-    }
 }
 
 // MARK: - UITableViewDataSource

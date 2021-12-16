@@ -39,7 +39,7 @@ class ProductsStore{
     
     // MARK: - Methods
     
-    func requestProducts(actionOnResponse:@escaping(Bool)->Void){
+    func requestProducts(actionOnResponse: @escaping(Bool)->Void){
         let url = URL(string: ProductsStore.productsUrl)
         
         guard let url = url else {fatalError()}

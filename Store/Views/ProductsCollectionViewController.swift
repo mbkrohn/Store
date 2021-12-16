@@ -11,11 +11,13 @@ private let reuseIdentifier = "Cell"
 
 class ProductsCollectionViewController: UICollectionViewController {
 
+    
     var selctedCategory : String?
+    private var allProducts :  [Product]?
     var products : [Product]? {
         get{
             if Auth.isLoggedIn {
-                return products
+                return allProducts
             } else {
                 return nil
             }
