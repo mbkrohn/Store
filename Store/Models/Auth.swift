@@ -179,10 +179,6 @@ struct Auth{
                 print("Error occured \(statusCode)")
             }
             actionOnResponse(isValidStatus)
-            
-            
-            
-            
         }
         task.resume()
     }
@@ -202,7 +198,7 @@ struct Auth{
 // MARK: -
 
 struct AccessToken : Decodable {
-    let access_token : String
+    let access_token : String?
 }
 
 

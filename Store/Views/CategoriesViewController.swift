@@ -16,7 +16,8 @@ class CategoriesViewController: UIViewController {
         super.viewDidLoad()
         
         categoriesTableView.dataSource = self
-        categories.requestProducts()
+        categoriesTableView.delegate = self
+        categories.requestProducts(actionOnResponse: whatever)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -27,32 +28,35 @@ class CategoriesViewController: UIViewController {
 
 }
 
+//MARK: UITableViewDataSource
+
 extension CategoriesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let categoryList = categories.products {
-            return categoryList.count
-        } else {
-            return 2
-        }
+        categories.categoriesList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = "categories.products.sorted()[IndexPath]"
+        cell.textLabel?.text = categories.categoriesList[indexPath.row]
         return cell
     }
     
 
- 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func whatever(isValidStatus: Bool){
+        DispatchQueue.main.async {
+            if(isValidStatus){
+                self.categoriesTableView.reloadData()
+            }
+        }
     }
-    */
-
 }
+
+// MARK: - UITableViewDataSource
+extension CategoriesViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+}
+
