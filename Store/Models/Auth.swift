@@ -38,6 +38,7 @@ struct Auth{
         }
         set {
             UserDefaults.standard.set(newValue, forKey: AuthVals.firstname.rawValue)
+            UserDefaults.standard.synchronize()
         }
     }
     
@@ -51,6 +52,7 @@ struct Auth{
         }
         set {
             UserDefaults.standard.set(newValue, forKey: AuthVals.lastname.rawValue)
+            UserDefaults.standard.synchronize()
         }
     }
     
@@ -64,6 +66,8 @@ struct Auth{
         }
         set {
             UserDefaults.standard.set(newValue, forKey: AuthVals.username.rawValue)
+            UserDefaults.standard.synchronize()
+
         }
     }
     
@@ -71,10 +75,12 @@ struct Auth{
         get {
             // Verify that there's a token and that it's a valid one.
             // if not, than remove the token from the UserDefaults and return nil
+            UserDefaults.standard.synchronize()
             guard let token = UserDefaults.standard.string(forKey: AuthVals.usersToken.rawValue),
                let expire = (UserDefaults.standard.object(forKey: AuthVals.tokenExpiration.rawValue) as! Date?), expire > Date() else {
                    UserDefaults.standard.removeObject(forKey: AuthVals.usersToken.rawValue)
                    UserDefaults.standard.removeObject(forKey: AuthVals.tokenExpiration.rawValue)
+                   UserDefaults.standard.synchronize()
                    return nil
                }
             return token
@@ -84,6 +90,7 @@ struct Auth{
             UserDefaults.standard.set(newValue, forKey: AuthVals.usersToken.rawValue)
             UserDefaults.standard.set(Date().addingTimeInterval(Auth.tokenExpirationMinutes * 60), forKey: AuthVals.tokenExpiration.rawValue)
             UserDefaults.standard.set(true, forKey: AuthVals.userIsRegistered.rawValue)
+            UserDefaults.standard.synchronize()
 
         }
     }
@@ -91,7 +98,7 @@ struct Auth{
     
     static var isLoggedIn : Bool {
         get {
-            return tokenId != nil
+            return Auth.tokenId != nil
         }
     }
     

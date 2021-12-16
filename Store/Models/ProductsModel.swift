@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProductsStore{
+class ProductsModel{
     
     // MARK: - Url's
     
@@ -15,19 +15,20 @@ class ProductsStore{
     static let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
     // MARK: - Properties
-    
+    private var allProducts : [String:[Product]]?
     var products : [String:[Product]]?{
         get{
-            if Auth.isLoggedIn {
-                return products
-            } else {
-                return nil
+            if !Auth.isLoggedIn {
+                allProducts = nil
             }
+            return allProducts
         }
-        set{}
+        set{
+            allProducts = newValue
+        }
     }
     
-    var categoriesList : [String]{
+    var categories : [String]{
         get{
             var categoriesArray = [String]()
             if let productsDict = products {
@@ -40,7 +41,7 @@ class ProductsStore{
     // MARK: - Methods
     
     func requestProducts(actionOnResponse: @escaping(Bool)->Void){
-        let url = URL(string: ProductsStore.productsUrl)
+        let url = URL(string: ProductsModel.productsUrl)
         
         guard let url = url else {fatalError()}
         
@@ -63,7 +64,7 @@ class ProductsStore{
                 if let safeData = data {
                     do {
                         let allProducts = try JSONDecoder().decode([Product].self, from: safeData)
-                        self.arrangeProductsByType(productsList: allProducts)
+                        self.arrangeProductsByType(productsArray: allProducts)
                     } catch {
                         print("Error while trying to decode products: \(error)")
                     }
@@ -93,17 +94,17 @@ class ProductsStore{
         }
     }
     
-    fileprivate func arrangeProductsByType(productsList: [Product]) {
+    fileprivate func arrangeProductsByType(productsArray: [Product]) {
         products = [String:[Product]]()
         // seek through the list of products and add all product of the same type to the collection
         // under the right key (key=product.type)
-        for product in productsList {
+        for product in productsArray {
             let productType = product.type ?? "Misc"
-                if products?[productType] != nil {
-                    products?[productType]?.append(product)
-                } else {
-                    products?[productType] = [product]
-                }
+            if products?[productType] != nil {
+                products?[productType]?.append(product)
+            } else {
+                products?[productType] = [product]
+            }
         }
     }
     

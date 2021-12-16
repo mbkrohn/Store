@@ -11,21 +11,17 @@ private let reuseIdentifier = "Cell"
 
 class ProductsCollectionViewController: UICollectionViewController {
 
-    
+    var productsModel : ProductsModel?
+
     var selctedCategory : String?
-    private var allProducts :  [Product]?
     var products : [Product]? {
         get{
-            if Auth.isLoggedIn {
-                return allProducts
-            } else {
+            if let category = selctedCategory {
+                return productsModel?.products?[category]
+            } else  {
                 return nil
             }
-               
         }
-        set{}
-        
-                
     }
     
     override func viewDidLoad() {
@@ -33,8 +29,10 @@ class ProductsCollectionViewController: UICollectionViewController {
 
         // Register cell classes
         self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         self.title = selctedCategory
     }
 
@@ -57,8 +55,8 @@ class ProductsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ProductCollectionCell
         
-        if let products = products {
-            let product = products[indexPath.row]
+        if let productsArray = products {
+            let product = productsArray[indexPath.row]
             cell.backgroundColor = .blue
             // productImage
             cell.productImage.image = loadImage(url: product.imageUrl)
@@ -67,7 +65,6 @@ class ProductsCollectionViewController: UICollectionViewController {
             // Price
             cell.priceLabel.text = "\(product.price ?? 0.0)"
         }
-    
         return cell
     }
 

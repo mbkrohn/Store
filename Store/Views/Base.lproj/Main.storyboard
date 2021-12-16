@@ -312,7 +312,7 @@
             <objects>
                 <viewController id="DMK-3j-D1R" customClass="ProfileViewController" customModule="Store" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7Xf-fj-Pl8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="QNw-vC-Gel">
@@ -371,11 +371,12 @@
                         <outlet property="firstNameLabel" destination="w7p-Xd-Cjr" id="pGu-V8-8VA"/>
                         <outlet property="lastNameLabel" destination="ebg-Uv-r5t" id="b4v-Bv-xZ6"/>
                         <outlet property="userNameLabel" destination="SHH-6U-tAk" id="yve-cz-r7V"/>
+                        <segue destination="qhm-Us-6W6" kind="show" identifier="profile2Login" id="Lt8-Xj-NHR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l2z-JT-fwp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1848" y="739"/>
+            <point key="canvasLocation" x="2259" y="723"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="nJ3-h2-Zg4">
@@ -420,6 +421,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="l0Y-Fm-lLK"/>
+        <segue reference="Lt8-Xj-NHR"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cart" catalog="system" width="128" height="102"/>

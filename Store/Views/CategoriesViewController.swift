@@ -15,14 +15,14 @@ class CategoriesViewController: UIViewController {
     var selectedCategory : String?
     
     @IBOutlet var categoriesTableView: UITableView!
-    var categories = ProductsStore()
+    var products = ProductsModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categoriesTableView.dataSource = self
         categoriesTableView.delegate = self
-        categories.requestProducts(actionOnResponse: {isValidResponse in
+        products.requestProducts(actionOnResponse: {isValidResponse in
             DispatchQueue.main.async {
                 if(isValidResponse){
                     self.categoriesTableView.reloadData()
@@ -41,12 +41,12 @@ class CategoriesViewController: UIViewController {
 
 extension CategoriesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categories.categoriesList.count
+        return products.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = categories.categoriesList[indexPath.row]
+        cell.textLabel?.text = products.categories[indexPath.row]
         return cell
     }
     
@@ -64,10 +64,9 @@ extension CategoriesViewController : UITableViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let productsView = segue.destination as! ProductsCollectionViewController
+        
+        productsView.productsModel = products
         productsView.selctedCategory = selectedCategory
-        if let selectedCategory = selectedCategory {
-            productsView.products = categories.getProducts(forCategory: selectedCategory)
-        }
     }
 }
 

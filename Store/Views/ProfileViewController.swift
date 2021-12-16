@@ -9,6 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
+    let segueId = "profile2Login"
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -22,6 +23,7 @@ class ProfileViewController: UIViewController {
     @IBAction func logoutPressed(_ sender: UIButton) {
         Auth().logout()
         populateLabels()
+        performSegue(withIdentifier: segueId, sender: self)
     }
     
     
