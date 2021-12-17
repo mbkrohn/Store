@@ -10,7 +10,6 @@ import UIKit
 class ProductsModel{
     
     // MARK: - Url's
-    
     static let productsUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products"
     static let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
@@ -115,7 +114,7 @@ class ProductsModel{
 }
 
 // MARK: - 
-struct Product: Codable, Equatable {
+struct Product: Codable, Equatable, Hashable{
     let id : String?
     let title : String?
     let type : String?

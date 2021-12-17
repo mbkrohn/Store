@@ -7,11 +7,21 @@
 
 import UIKit
 
-class FavoritesTableViewController: UITableViewController {
+class FavoritesTableViewController: UITableViewController  {
 
+    var cart : Cart?
+    var iter : Set<Product>.Iterator?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        cart = (UIApplication.shared.delegate as! AppDelegate).cart
+        iter = cart?.shoppingCart?.makeIterator()
+        
+        let p1 = Product(id: "firstp", title: "FirstP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
+        let p2 = Product(id: "secondp", title: "SecondP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
+        cart?.addProduct(newProduct: p1)
+        cart?.addProduct(newProduct: p2)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -23,23 +33,20 @@ class FavoritesTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
+        if let cart = cart, let count = cart.shoppingCart?.count{
+            return count
+        }
         return 0
-    }
+    
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+            cell.textLabel?.text = cart?.shoppingCart??!?[indexPath.row].title
+        
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -86,4 +93,5 @@ class FavoritesTableViewController: UITableViewController {
     }
     */
 
+}
 }

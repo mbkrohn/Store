@@ -28,13 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
         
         guard let _ = (scene as? UIWindowScene) else { return }
-        
-//        if let tabBarController = self.window!.rootViewController as? UITabBarController {
-//            if let tabCount = tabBarController.tabBar.items?.count {
-//                tabBarController.selectedIndex = tabCount - 1
-//            }
-//        }
-        
+         
         
         //        if Auth.isRegistered()
     }

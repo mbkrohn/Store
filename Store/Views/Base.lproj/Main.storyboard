@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -209,7 +210,7 @@
         <!--Favorites-->
         <scene sceneID="f3U-g3-hRB">
             <objects>
-                <tableViewController id="ult-TI-9f5" customClass="FavoritesTableViewController" sceneMemberID="viewController">
+                <tableViewController modalPresentationStyle="fullScreen" id="ult-TI-9f5" customClass="FavoritesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="YPg-7r-nMo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -310,9 +311,9 @@
         <!--Profile-->
         <scene sceneID="5qk-Ht-S4U">
             <objects>
-                <viewController id="DMK-3j-D1R" customClass="ProfileViewController" customModule="Store" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="DMK-3j-D1R" customClass="ProfileViewController" customModule="Store" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7Xf-fj-Pl8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="QNw-vC-Gel">
@@ -381,7 +382,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="nJ3-h2-Zg4">
             <objects>
-                <tabBarController storyboardIdentifier="MainVc" automaticallyAdjustsScrollViewInsets="NO" id="Sec-zR-VnJ" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainVc" automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="Sec-zR-VnJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="0XP-Pp-Bdi"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Myz-Ag-lee">
@@ -402,12 +403,16 @@
         <!--Shop-->
         <scene sceneID="5A4-b3-lJJ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RVi-OB-34F" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="RVi-OB-34F" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Shop" image="cart" catalog="system" id="4V9-ap-wm0"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XSq-Pl-DQx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="AccentColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -427,6 +432,9 @@
         <image name="cart" catalog="system" width="128" height="102"/>
         <image name="heart" catalog="system" width="128" height="109"/>
         <image name="person" catalog="system" width="128" height="117"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
