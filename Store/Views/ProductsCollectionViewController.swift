@@ -11,8 +11,9 @@ private let reuseIdentifier = "Cell"
 
 class ProductsCollectionViewController: UICollectionViewController {
 
+    var layout : UICollectionViewFlowLayout?
+    
     var productsModel : ProductsModel?
-
     var selctedCategory : String?
     var products : [Product]? {
         get{
@@ -115,5 +116,14 @@ class ProductsCollectionViewController: UICollectionViewController {
     
     }
     */
+    
+    /*override*/ func viewWillLayoutSubviews1() {
+        let margin: CGFloat = 10
+        let cellsPerRow = 5
+        guard let collectionView = collectionView, let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
+        let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
+        flowLayout.itemSize =  CGSize(width: itemWidth, height: itemWidth)
+       }
 
 }
