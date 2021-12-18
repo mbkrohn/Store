@@ -20,11 +20,11 @@
 		B47114FC2767594200745682 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47114FB2767594200745682 /* CategoriesViewController.swift */; };
 		B47114FE2767599600745682 /* ProductsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47114FD2767599600745682 /* ProductsCollectionViewController.swift */; };
 		B4711500276759B900745682 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47114FF276759B900745682 /* ProfileViewController.swift */; };
-		B471150227675A3800745682 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471150127675A3800745682 /* FavoritesTableViewController.swift */; };
 		B47115042767655400745682 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47115032767655400745682 /* Auth.swift */; };
 		B47115062768B87000745682 /* ProductsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47115052768B87000745682 /* ProductsModel.swift */; };
 		B4B4A629276B54360070FB6F /* ProductCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B4A627276B54360070FB6F /* ProductCollectionCell.swift */; };
 		B4B4A62A276B54360070FB6F /* ProductCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4B4A628276B54360070FB6F /* ProductCollectionCell.xib */; };
+		F0013385276E571400919EB8 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0013384276E571400919EB8 /* FavoritesTableViewController.swift */; };
 		F0BBC1C52767EEDF003A269A /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BBC1C42767EEDF003A269A /* AccessToken.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,11 +44,11 @@
 		B47114FB2767594200745682 /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		B47114FD2767599600745682 /* ProductsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsCollectionViewController.swift; sourceTree = "<group>"; };
 		B47114FF276759B900745682 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		B471150127675A3800745682 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		B47115032767655400745682 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		B47115052768B87000745682 /* ProductsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsModel.swift; sourceTree = "<group>"; };
 		B4B4A627276B54360070FB6F /* ProductCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionCell.swift; sourceTree = "<group>"; };
 		B4B4A628276B54360070FB6F /* ProductCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProductCollectionCell.xib; sourceTree = "<group>"; };
+		F0013384276E571400919EB8 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		F0BBC1C42767EEDF003A269A /* AccessToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,9 +105,9 @@
 				B47114FB2767594200745682 /* CategoriesViewController.swift */,
 				B47114FD2767599600745682 /* ProductsCollectionViewController.swift */,
 				B47114FF276759B900745682 /* ProfileViewController.swift */,
-				B471150127675A3800745682 /* FavoritesTableViewController.swift */,
 				B4B4A627276B54360070FB6F /* ProductCollectionCell.swift */,
 				B4B4A628276B54360070FB6F /* ProductCollectionCell.xib */,
+				F0013384276E571400919EB8 /* FavoritesTableViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -208,9 +208,9 @@
 				B4B4A629276B54360070FB6F /* ProductCollectionCell.swift in Sources */,
 				B47114F62767574A00745682 /* InitialViewController.swift in Sources */,
 				B47114F82767588700745682 /* RegisterViewController.swift in Sources */,
-				B471150227675A3800745682 /* FavoritesTableViewController.swift in Sources */,
 				B47114FA276758A700745682 /* LoginViewController.swift in Sources */,
 				B47115042767655400745682 /* Auth.swift in Sources */,
+				F0013385276E571400919EB8 /* FavoritesTableViewController.swift in Sources */,
 				B47114DA2767514E00745682 /* AppDelegate.swift in Sources */,
 				B4530706276A04FA00B6E692 /* Cart.swift in Sources */,
 				B4711500276759B900745682 /* ProfileViewController.swift in Sources */,

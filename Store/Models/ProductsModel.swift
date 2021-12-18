@@ -106,15 +106,11 @@ class ProductsModel{
             }
         }
     }
-    
-    
-    
-    
-    
+   
 }
 
 // MARK: - 
-struct Product: Codable, Equatable, Hashable{
+struct Product: Codable, Hashable{
     let id : String?
     let title : String?
     let type : String?

@@ -10,7 +10,6 @@ import UIKit
 class Cart{
     
     let cartFileName : String
-    var cartFile : URL?
     var shoppingCart : Set<Product>?
     
     init(storgeFileName : String = "cart.plist"){
@@ -19,42 +18,37 @@ class Cart{
     
     
     func addProduct(newProduct : Product){
-        if var shopCart = shoppingCart {
-//            if shopCart.first(where: { $0 == newProduct }) == nil {
-                shopCart.insert(newProduct)
-//            }
-        } else {
-            shoppingCart = [newProduct]
+        if shoppingCart == nil {
+            shoppingCart = Set<Product>()
         }
+        shoppingCart?.insert(newProduct)
     }
     
     func removeProduct(productToRemove: Product){
-        if var shopCart = shoppingCart {
-//            shopCart.removeAll(where: { $0 == productToRemove })
-            shopCart.remove(productToRemove)
-        }
+        shoppingCart?.remove(productToRemove)
     }
     
     func emptyBasket(){
-        if var favorites = shoppingCart {
-            favorites.removeAll()
-        }
+        shoppingCart?.removeAll()
     }
     
 
-    fileprivate func createStorage(){
-        do {
-            cartFile = try FileManager.default.url(for: .documentDirectory, in:.userDomainMask, appropriateFor: nil, create: true ).appendingPathComponent(cartFileName)
-        } catch {
-            print("Error while creating file \(error)")
-        }
-    }
     
     // this is called before closing the app
     func saveCartItemsToFile(){
-        guard let shopCart = shoppingCart else {return }
-        if shopCart.isEmpty { return }
-            
+        guard shoppingCart != nil, shoppingCart!.isEmpty else { return }
+        
+        var cartFile : URL?
+        do {
+            cartFile = try FileManager.default.url(for: .documentDirectory, in:.userDomainMask, appropriateFor: nil, create: false ).appendingPathComponent(cartFileName)
+        } catch {
+            print("Error while creating cart storage file\(error)")
+        }
+        
+        if let path=cartFile?.path, !FileManager.default.fileExists(atPath: path){
+            return
+        }
+        
         let encoder = PropertyListEncoder()
         if let cartFile = cartFile {
             do {
@@ -68,6 +62,17 @@ class Cart{
     
     // this is called when the app loads
     func loadCartItemsFromFile(){
+        var cartFile : URL?
+        do {
+            cartFile = try FileManager.default.url(for: .documentDirectory, in:.userDomainMask, appropriateFor: nil, create: false ).appendingPathComponent(cartFileName)
+        } catch {
+            print("Error while creating cart storage file\(error)")
+        }
+        
+        if let path=cartFile?.path, !FileManager.default.fileExists(atPath: path){
+            return
+        }
+        
         let decoder = PropertyListDecoder()
         if let cartFile = cartFile {
             do {
