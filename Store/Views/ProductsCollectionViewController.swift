@@ -84,8 +84,8 @@ class ProductsCollectionViewController: UIViewController {
         layout.minimumInteritemSpacing = 2
         print(view.frame.width)
         print(view.frame.height)
-       // layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
-        layout.itemSize = itemSize
+        layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
+       // layout.itemSize = itemSize
 
         collectionView.collectionViewLayout = layout
     }
@@ -106,13 +106,27 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
         
         if let productsArray = products {
             let product = productsArray[indexPath.row]
+
             // productImage
             cell.productImageView.image = loadImage(url: product.imageUrl)
-            // Description
+
+            // title
             cell.titleLabel.text = product.title
-            // Price
+
+            // price
             cell.priceLabel.text = "\(product.price ?? 0.0)"
+            
+            // heartButton
+            if product.isSelected != nil{
+                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: UIControl.State.normal)
+            } else {
+                cell.heartButton.setImage(UIImage(systemName: "heart"), for: UIControl.State.normal)
+            }
+            
             cell.productId = product.id
+            cell.productCellDelegate = self
+            
+            print("cellForRowAt")
         }
         return cell
     }
@@ -121,6 +135,8 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
     func getProduct(byId productId : String)->Product?{
         return products?.first(where: {$0.id == productId })
     }
+    
+    
     
 }
     
@@ -131,21 +147,26 @@ extension ProductsCollectionViewController : UICollectionViewDelegate{
         let cell = cv.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProductCollectionCell
         cell.heartButton.sendActions(for: .touchUpInside)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadData()
+    }
 
 }
 
 extension ProductsCollectionViewController : ProductCollectionCellDelegate {
-    func heartPressed(forProduct productId : String, toAdd: Bool) {
-        if let product = getProduct(byId: productId) {
-            if toAdd {
-                cart?.addProduct(newProduct: product)
-            } else {
-                cart?.removeProduct(productToRemove: product)
-            }
+    
+    func heartPressed(_ sender: UIButton, for productId : String) {
+        guard product = cart?.getProduct(byId: productId) else { return }
+        
+        if product.isSelected != nil {
+            product.isSelected = !product.isSelected!
+        } else {
+            product.isSelected = true
         }
-    }
-    
-    
+        collectionView.reloadData()
+    }    
 }
 
 //

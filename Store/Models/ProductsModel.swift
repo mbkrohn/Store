@@ -110,7 +110,18 @@ class ProductsModel{
 }
 
 // MARK: - 
-struct Product: Codable, Hashable{
+class Product: Codable, Hashable{
+    
+    static func == (lhs: Product, rhs: Product) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    var hashValue: Int {
+            return (id + title + type + description + filename + height + width + price + rating + imageUrl + isSelected).hashValue
+        }
+    
+    
+    
     let id : String?
     let title : String?
     let type : String?
@@ -121,6 +132,7 @@ struct Product: Codable, Hashable{
     let price : Float?
     let rating : Int?
     let imageUrl: String?
+    var isSelected : Bool?
 }
 
 

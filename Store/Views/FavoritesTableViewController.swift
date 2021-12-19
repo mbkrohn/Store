@@ -17,11 +17,11 @@ class FavoritesTableViewController: UITableViewController {
 
         cart = (UIApplication.shared.delegate as! AppDelegate).cart
         
-        let p1 = Product(id: "firstp", title: "FirstP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
-        let p2 = Product(id: "secondp", title: "SecondP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
-        cart?.addProduct(newProduct: p1)
-        cart?.addProduct(newProduct: p2)
-        
+//        let p1 = Product(id: "firstp", title: "FirstP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
+//        let p2 = Product(id: "secondp", title: "SecondP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
+//        cart?.addProduct(newProduct: p1)
+//        cart?.addProduct(newProduct: p2)
+//
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -38,8 +38,8 @@ class FavoritesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if let cart = cart, let count = cart.shoppingCart?.count{
-            return count
+        if let cart = cart {
+            return cart.shoppingCart.count
         } else {
             return 0
         }
@@ -50,7 +50,7 @@ class FavoritesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cartCell", for: indexPath)
 
         if cartIterator == nil{
-            cartIterator = cart?.shoppingCart?.makeIterator()
+            cartIterator = cart?.shoppingCart.makeIterator()
         }
 
         let product = cartIterator?.next()

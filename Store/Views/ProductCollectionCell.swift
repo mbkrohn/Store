@@ -16,7 +16,6 @@ class ProductCollectionCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     
     var productId : String?
-    var isSelectedProoduct = false
     
     var productCellDelegate : ProductCollectionCellDelegate?
     
@@ -26,22 +25,16 @@ class ProductCollectionCell: UICollectionViewCell {
     }
 
     @IBAction func heartPressed(_ sender: UIButton) {
-        guard productId != nil  else { return }
-        isSelectedProoduct = !isSelectedProoduct
-        print(sender)
-        if isSelectedProoduct {
-            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        } else {
-            sender.setImage(UIImage(systemName: "heart"), for: .normal)
+        if let prodId = productId {
+            productCellDelegate?.heartPressed(sender, for: prodId)
         }
-        productCellDelegate?.heartPressed(forProduct: productId!, toAdd: isSelectedProoduct)
     }
     
 }
 
 
 protocol ProductCollectionCellDelegate{
-    func heartPressed(forProduct productId :String, toAdd: Bool)
+    func heartPressed(_ sender: UIButton, for productId: String)
 }
 
 
