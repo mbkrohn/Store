@@ -10,33 +10,41 @@ import UIKit
 class Cart{
     
     let cartFileName : String
-    var shoppingCart : Set<Product>?
+    var shoppingCart : Set<Product>
     
     init(storgeFileName : String = "cart.plist"){
         self.cartFileName = storgeFileName
+        shoppingCart = Set<Product>()
     }
     
     
     func addProduct(newProduct : Product){
-        if shoppingCart == nil {
-            shoppingCart = Set<Product>()
-        }
-        shoppingCart?.insert(newProduct)
+        shoppingCart.insert(newProduct)
     }
     
     func removeProduct(productToRemove: Product){
-        shoppingCart?.remove(productToRemove)
+        shoppingCart.remove(productToRemove)
+    }
+    
+    func removeProduct(productId: String){
+        if let found = getProduct(byId: productId) {
+            shoppingCart.remove(found)
+        }
+    }
+    
+    func getProduct(byId productId : String)->Product? {
+        if shoppingCart.isEmpty { return nil }
+        return shoppingCart.first(where: { $0.id == productId})
     }
     
     func emptyBasket(){
-        shoppingCart?.removeAll()
+        shoppingCart.removeAll()
     }
     
-
     
     // this is called before closing the app
     func saveCartItemsToFile(){
-        guard shoppingCart != nil, shoppingCart!.isEmpty else { return }
+        guard shoppingCart.isEmpty else { return }
         
         var cartFile : URL?
         do {

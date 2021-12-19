@@ -13,11 +13,11 @@ class ProductsCollectionViewController: UIViewController {
     let cellId = "productCell"
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionCell: UICollectionViewCell!
     
     
     var productsModel : ProductsModel?
     var selctedCategory : String?
+    var cart : Cart?
     
     var products : [Product]? {
         get{
@@ -35,9 +35,12 @@ class ProductsCollectionViewController: UIViewController {
         // Register cell classes
         self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         
-//        setLayout()
+        cart = (UIApplication.shared.delegate as! AppDelegate).cart
+        
+        setLayout()
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         
         self.title = selctedCategory
     }
@@ -55,20 +58,12 @@ class ProductsCollectionViewController: UIViewController {
     }
  
     
-//    /*override*/ func viewWillLayoutSubviews1() {
-//        let margin: CGFloat = 10
-//        let cellsPerRow = 5
-//        guard let collectionView = collectionView, let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-//        let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
-//        let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
-//        flowLayout.itemSize =  CGSize(width: itemWidth, height: itemWidth)
-//       }
-    private let numberOfItemPerRow = 2
+    private let numberOfItemPerRow = 3
 
-    private let screenWidth = UIScreen.main.bounds.width
-    private let sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    private let minimumInteritemSpacing = CGFloat(10)
-    private let minimumLineSpacing = CGFloat(10)
+    /*private*/ let screenWidth = UIScreen.main.bounds.width
+    /*private*/ let sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+    /*private*/ let minimumInteritemSpacing = CGFloat(10)
+    /*private*/ let minimumLineSpacing = CGFloat(10)
 
     // Calculate the item size based on the configuration above
     private var itemSize: CGSize {
@@ -82,14 +77,16 @@ class ProductsCollectionViewController: UIViewController {
         return CGSize(width: width, height: height)
     }
     
-    fileprivate func setLayout1() {
-        var layout : UICollectionViewFlowLayout
-        layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumLineSpacing = 1
-        layout.minimumInteritemSpacing = 1
+    fileprivate func setLayout() {
+        let layout = UICollectionViewFlowLayout()
+        //layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 2
         print(view.frame.width)
         print(view.frame.height)
-        layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
+       // layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
+        layout.itemSize = itemSize
+
         collectionView.collectionViewLayout = layout
     }
     
@@ -109,24 +106,79 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
         
         if let productsArray = products {
             let product = productsArray[indexPath.row]
-            cell.backgroundColor = .blue
             // productImage
             cell.productImageView.image = loadImage(url: product.imageUrl)
             // Description
             cell.titleLabel.text = product.title
             // Price
             cell.priceLabel.text = "\(product.price ?? 0.0)"
+            cell.productId = product.id
         }
         return cell
     }
     
-        
+    
+    func getProduct(byId productId : String)->Product?{
+        return products?.first(where: {$0.id == productId })
+    }
+    
 }
     
+
 extension ProductsCollectionViewController : UICollectionViewDelegate{
-        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cv = collectionView
+        let cell = cv.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProductCollectionCell
+        cell.heartButton.sendActions(for: .touchUpInside)
+    }
+
 }
+
+extension ProductsCollectionViewController : ProductCollectionCellDelegate {
+    func heartPressed(forProduct productId : String, toAdd: Bool) {
+        if let product = getProduct(byId: productId) {
+            if toAdd {
+                cart?.addProduct(newProduct: product)
+            } else {
+                cart?.removeProduct(productToRemove: product)
+            }
+        }
+    }
     
     
+}
+
+//
+//    // Uncomment this method to specify if the specified item should be selected
+//    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+//        return true
+//    }
+//
+//
+//
+//    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
+//    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+//        return true
+//    }
+//
+//    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
+//        return true
+//    }
+//
+//    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
+//        self.printThatItWorked()
+//    }
+//
+//    func printThatItWorked()
+//    {
+//        println("It worked")
+//    }
+//
+
+
+
+
     
+    
+
     
