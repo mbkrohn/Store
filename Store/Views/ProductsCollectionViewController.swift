@@ -7,14 +7,18 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
 
-class ProductsCollectionViewController: UICollectionViewController {
+class ProductsCollectionViewController: UIViewController {
 
-    var layout : UICollectionViewFlowLayout?
+    let cellId = "productCell"
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionCell: UICollectionViewCell!
+    
     
     var productsModel : ProductsModel?
     var selctedCategory : String?
+    
     var products : [Product]? {
         get{
             if let category = selctedCategory {
@@ -29,44 +33,13 @@ class ProductsCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         // Register cell classes
-        self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         
+//        setLayout()
         collectionView.delegate = self
         collectionView.dataSource = self
         
         self.title = selctedCategory
-    }
-
-// MARK:- UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        if let itemCount = products?.count {
-            return itemCount
-        }
-        return 1
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ProductCollectionCell
-        
-        if let productsArray = products {
-            let product = productsArray[indexPath.row]
-            cell.backgroundColor = .blue
-            // productImage
-            cell.productImage.image = loadImage(url: product.imageUrl)
-            // Description
-            cell.descriptionLabel.text = product.description
-            // Price
-            cell.priceLabel.text = "\(product.price ?? 0.0)"
-        }
-        return cell
     }
 
     
@@ -80,50 +53,80 @@ class ProductsCollectionViewController: UICollectionViewController {
         }
         return nil
     }
+ 
     
+//    /*override*/ func viewWillLayoutSubviews1() {
+//        let margin: CGFloat = 10
+//        let cellsPerRow = 5
+//        guard let collectionView = collectionView, let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+//        let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
+//        let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
+//        flowLayout.itemSize =  CGSize(width: itemWidth, height: itemWidth)
+//       }
+    private let numberOfItemPerRow = 2
+
+    private let screenWidth = UIScreen.main.bounds.width
+    private let sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    private let minimumInteritemSpacing = CGFloat(10)
+    private let minimumLineSpacing = CGFloat(10)
+
+    // Calculate the item size based on the configuration above
+    private var itemSize: CGSize {
+        let interitemSpacesCount = numberOfItemPerRow - 1
+        let interitemSpacingPerRow = minimumInteritemSpacing * CGFloat(interitemSpacesCount)
+        let rowContentWidth = screenWidth - sectionInset.right - sectionInset.left - interitemSpacingPerRow
+
+        let width = rowContentWidth / CGFloat(numberOfItemPerRow)
+        let height = width // feel free to change the height to whatever you want
+
+        return CGSize(width: width, height: height)
+    }
+    
+    fileprivate func setLayout1() {
+        var layout : UICollectionViewFlowLayout
+        layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
+        print(view.frame.width)
+        print(view.frame.height)
+        layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
+        collectionView.collectionViewLayout = layout
+    }
+    
+}
     
     // MARK: UICollectionViewDelegate
-
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // if var cell = collectionView.cellForItem(at: indexPath) as! ProductCollectionCell {
-        //   let heart = cell.heartButton.        }
+extension ProductsCollectionViewController : UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let itemCount = products?.count {
+                    return itemCount
+                }
+                return 1
     }
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProductCollectionCell
+        
+        if let productsArray = products {
+            let product = productsArray[indexPath.row]
+            cell.backgroundColor = .blue
+            // productImage
+            cell.productImageView.image = loadImage(url: product.imageUrl)
+            // Description
+            cell.titleLabel.text = product.title
+            // Price
+            cell.priceLabel.text = "\(product.price ?? 0.0)"
+        }
+        return cell
     }
-    */
     
-    /*override*/ func viewWillLayoutSubviews1() {
-        let margin: CGFloat = 10
-        let cellsPerRow = 5
-        guard let collectionView = collectionView, let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        let marginsAndInsets = flowLayout.sectionInset.left + flowLayout.sectionInset.right + collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right + flowLayout.minimumInteritemSpacing * CGFloat(cellsPerRow - 1)
-        let itemWidth = ((collectionView.bounds.size.width - marginsAndInsets) / CGFloat(cellsPerRow)).rounded(.down)
-        flowLayout.itemSize =  CGSize(width: itemWidth, height: itemWidth)
-       }
-
+        
 }
+    
+extension ProductsCollectionViewController : UICollectionViewDelegate{
+        
+}
+    
+    
+    
+    
