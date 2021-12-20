@@ -95,7 +95,7 @@ class ProductsModel{
             if isValidStatus {
                 if let safeData = data {
                     do {
-                        let allProducts = try JSONDecoder().decode([Product].self, from: safeData)
+                        self.products = try JSONDecoder().decode([Product].self, from: safeData)
                     } catch {
                         print("Error while trying to decode products: \(error)")
                     }
