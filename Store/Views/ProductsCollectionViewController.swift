@@ -17,16 +17,19 @@ class ProductsCollectionViewController: UIViewController {
     
     var productsModel : ProductsModel?
     var selctedCategory : String?
-    var cart : Cart?
     
     var products : [Product]? {
         get{
             if let category = selctedCategory {
-                return productsModel?.products?[category]
+                return productsModel?.getProducts(forCategory: category)
             } else  {
                 return nil
             }
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .didChangedProductSelection, object: nil)
     }
     
     override func viewDidLoad() {
@@ -35,7 +38,7 @@ class ProductsCollectionViewController: UIViewController {
         // Register cell classes
         self.collectionView.register(UINib(nibName: "ProductCollectionCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         
-        cart = (UIApplication.shared.delegate as! AppDelegate).cart
+        NotificationCenter.default.addObserver(self, selector: #selector(didChangeSelection(_:)), name: .didChangedProductSelection, object: nil)
         
         setLayout()
         collectionView.delegate = self
@@ -45,6 +48,10 @@ class ProductsCollectionViewController: UIViewController {
         self.title = selctedCategory
     }
 
+    @objc func didChangeSelection(_ notification: Notification){
+        collectionView.reloadData()
+    }
+    
     
     func loadImage(url:String?)->UIImage?{
         
@@ -60,22 +67,22 @@ class ProductsCollectionViewController: UIViewController {
     
     private let numberOfItemPerRow = 3
 
-    /*private*/ let screenWidth = UIScreen.main.bounds.width
-    /*private*/ let sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-    /*private*/ let minimumInteritemSpacing = CGFloat(10)
-    /*private*/ let minimumLineSpacing = CGFloat(10)
-
-    // Calculate the item size based on the configuration above
-    private var itemSize: CGSize {
-        let interitemSpacesCount = numberOfItemPerRow - 1
-        let interitemSpacingPerRow = minimumInteritemSpacing * CGFloat(interitemSpacesCount)
-        let rowContentWidth = screenWidth - sectionInset.right - sectionInset.left - interitemSpacingPerRow
-
-        let width = rowContentWidth / CGFloat(numberOfItemPerRow)
-        let height = width // feel free to change the height to whatever you want
-
-        return CGSize(width: width, height: height)
-    }
+//    /*private*/ let screenWidth = UIScreen.main.bounds.width
+//    /*private*/ let sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+//    /*private*/ let minimumInteritemSpacing = CGFloat(10)
+//    /*private*/ let minimumLineSpacing = CGFloat(10)
+//
+//    // Calculate the item size based on the configuration above
+//    private var itemSize: CGSize {
+//        let interitemSpacesCount = numberOfItemPerRow - 1
+//        let interitemSpacingPerRow = minimumInteritemSpacing * CGFloat(interitemSpacesCount)
+//        let rowContentWidth = screenWidth - sectionInset.right - sectionInset.left - interitemSpacingPerRow
+//
+//        let width = rowContentWidth / CGFloat(numberOfItemPerRow)
+//        let height = width // feel free to change the height to whatever you want
+//
+//        return CGSize(width: width, height: height)
+//    }
     
     fileprivate func setLayout() {
         let layout = UICollectionViewFlowLayout()
@@ -98,7 +105,7 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
         if let itemCount = products?.count {
                     return itemCount
                 }
-                return 1
+                return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -117,14 +124,14 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
             cell.priceLabel.text = "\(product.price ?? 0.0)"
             
             // heartButton
-            if product.isSelected != nil{
+            if product.isSelected != nil && product.isSelected! {
                 cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: UIControl.State.normal)
             } else {
                 cell.heartButton.setImage(UIImage(systemName: "heart"), for: UIControl.State.normal)
             }
             
             cell.productId = product.id
-            cell.productCellDelegate = self
+//            cell.productCellDelegate = self
             
             print("cellForRowAt")
         }
@@ -132,9 +139,9 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
     }
     
     
-    func getProduct(byId productId : String)->Product?{
-        return products?.first(where: {$0.id == productId })
-    }
+//    func getProduct(byId productId : String)->Product?{
+//        return products?.first(where: {$0.id == productId })
+//    }
     
     
     
@@ -143,9 +150,13 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
 
 extension ProductsCollectionViewController : UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cv = collectionView
-        let cell = cv.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProductCollectionCell
-        cell.heartButton.sendActions(for: .touchUpInside)
+//        let cv = collectionView
+//        let cell = cv.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ProductCollectionCell
+        if let product = products?[indexPath.row] {
+            let userInfo = [product.id : product]
+            NotificationCenter.default.post(name: .didRequestSelectionChange, object: nil, userInfo: userInfo)
+        }
+//        cell.heartButton.sendActions(for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,19 +166,19 @@ extension ProductsCollectionViewController : UICollectionViewDelegate{
 
 }
 
-extension ProductsCollectionViewController : ProductCollectionCellDelegate {
-    
-    func heartPressed(_ sender: UIButton, for productId : String) {
-        guard product = cart?.getProduct(byId: productId) else { return }
-        
-        if product.isSelected != nil {
-            product.isSelected = !product.isSelected!
-        } else {
-            product.isSelected = true
-        }
-        collectionView.reloadData()
-    }    
-}
+//extension ProductsCollectionViewController : ProductCollectionCellDelegate {
+//
+//    func heartPressed(_ sender: UIButton, for productId : String) {
+//        guard product = cart?.getProduct(byId: productId) else { return }
+//
+//        if product.isSelected != nil {
+//            product.isSelected = !product.isSelected!
+//        } else {
+//            product.isSelected = true
+//        }
+//        collectionView.reloadData()
+//    }
+//}
 
 //
 //    // Uncomment this method to specify if the specified item should be selected

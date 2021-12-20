@@ -6,6 +6,10 @@
 //
 
 import UIKit
+extension Notification.Name{
+    static let didRequestSelectionChange = Notification.Name("didRequestSelectionChange")
+    static let didChangedProductSelection = Notification.Name("didChangedProductSelection")
+}
 
 class ProductsModel{
     
@@ -14,8 +18,10 @@ class ProductsModel{
     static let createBasketUrl = "https://balink-ios-learning.herokuapp.com/api/v1/products/basket"
     
     // MARK: - Properties
-    private var allProducts : [String:[Product]]?
-    var products : [String:[Product]]?{
+    private var allProducts : [Product]?
+    
+    
+    var products : [Product]?{
         get{
             if !Auth.isLoggedIn {
                 allProducts = nil
@@ -27,17 +33,44 @@ class ProductsModel{
         }
     }
     
+    
     var categories : [String]{
         get{
-            var categoriesArray = [String]()
-            if let productsDict = products {
-                categoriesArray = productsDict.keys.map{String($0)}
+            var categoriesSet = Set<String>()
+            if let productsArray = products {
+                for product in productsArray {
+                    categoriesSet.insert(product.type ?? "misc")
+                }
             }
-            return categoriesArray
+            return categoriesSet.map{$0}
         }
     }
     
-    // MARK: - Methods
+    
+    init(){
+        NotificationCenter.default.addObserver(self, selector: #selector(changeIsSelected(_:)), name: .didRequestSelectionChange, object: nil)
+    }
+    
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self, name: .didRequestSelectionChange, object: nil)
+    }
+    
+    
+    @objc func changeIsSelected(_ notification: Notification){
+        guard let productId = notification.userInfo?.first?.key as? String else { return }
+        guard products != nil, let index = products?.firstIndex(where: {$0.id == productId}) else { return }
+        
+        if let isSelected = products![index].isSelected {
+            products![index].isSelected = !isSelected
+        } else {
+            products![index].isSelected = true
+        }
+        
+        NotificationCenter.default.post(name: .didChangedProductSelection, object: self, userInfo: [productId : products![index]])
+    }
+    
+    
     
     func requestProducts(actionOnResponse: @escaping(Bool)->Void){
         let url = URL(string: ProductsModel.productsUrl)
@@ -63,7 +96,6 @@ class ProductsModel{
                 if let safeData = data {
                     do {
                         let allProducts = try JSONDecoder().decode([Product].self, from: safeData)
-                        self.arrangeProductsByType(productsArray: allProducts)
                     } catch {
                         print("Error while trying to decode products: \(error)")
                     }
@@ -75,11 +107,16 @@ class ProductsModel{
     }
     
     
-    func getProducts(forCategory category : String)->[Product]?{
-        if let categoryProducts = products?[category] {
-            return categoryProducts
+    func getProducts(forCategory category : String)->[Product]{
+        var categoryProducts = [Product]()
+        if let prodcutDict = products {
+            for product in prodcutDict {
+                if product.type == category {
+                    categoryProducts.append(product)
+                }
+            }
         }
-        return nil
+        return categoryProducts
     }
     
     // MARK: - Private methods
@@ -92,35 +129,10 @@ class ProductsModel{
             return false
         }
     }
-    
-    fileprivate func arrangeProductsByType(productsArray: [Product]) {
-        products = [String:[Product]]()
-        // seek through the list of products and add all product of the same type to the collection
-        // under the right key (key=product.type)
-        for product in productsArray {
-            let productType = product.type ?? "Misc"
-            if products?[productType] != nil {
-                products?[productType]?.append(product)
-            } else {
-                products?[productType] = [product]
-            }
-        }
-    }
-   
 }
 
 // MARK: - 
-class Product: Codable, Hashable{
-    
-    static func == (lhs: Product, rhs: Product) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    var hashValue: Int {
-            return (id + title + type + description + filename + height + width + price + rating + imageUrl + isSelected).hashValue
-        }
-    
-    
+struct Product: Codable, Hashable{
     
     let id : String?
     let title : String?

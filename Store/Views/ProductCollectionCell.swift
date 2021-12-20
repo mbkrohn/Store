@@ -26,7 +26,8 @@ class ProductCollectionCell: UICollectionViewCell {
 
     @IBAction func heartPressed(_ sender: UIButton) {
         if let prodId = productId {
-            productCellDelegate?.heartPressed(sender, for: prodId)
+            NotificationCenter.default.post(name: .didRequestSelectionChange, object: nil, userInfo: [prodId: prodId])
+//            productCellDelegate?.heartPressed(sender, for: prodId)
         }
     }
     
