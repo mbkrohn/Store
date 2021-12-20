@@ -31,7 +31,7 @@ class FavoritesTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         guard productModel != nil else { return 0 }
         
-        if let count = productModel?.getSelectedProducts()?.count {
+        if let count = productModel?.getProducts(bySelection: true)?.count {
             return count
         }
         return 0
@@ -42,8 +42,8 @@ class FavoritesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cartCell", for: indexPath)
         var cellText = "No Product found"
         
-        if let product = productModel?.getSelectedProducts()?[indexPath.row], product.title != nil {
-           cellText  = product.title!
+        if let product = productModel?.getProducts(bySelection: true)?[indexPath.row] {
+           cellText  = product.title ?? ""
         }
         cell.textLabel?.text  = cellText
         return cell

@@ -87,13 +87,9 @@ class ProductsCollectionViewController: UIViewController {
     fileprivate func setLayout() {
         let layout = UICollectionViewFlowLayout()
         //layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.minimumLineSpacing = 2
-        layout.minimumInteritemSpacing = 2
-        print(view.frame.width)
-        print(view.frame.height)
-        layout.itemSize = CGSize(width: view.frame.width / 3, height: view.frame.width / 3)
-       // layout.itemSize = itemSize
-
+//        layout.minimumLineSpacing = 10
+//        layout.minimumInteritemSpacing = 10
+        layout.itemSize = CGSize(width: (UIScreen.main.bounds.width - 20) / 3, height: 200)
         collectionView.collectionViewLayout = layout
     }
     
@@ -115,7 +111,7 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
             let product = productsArray[indexPath.row]
 
             // productImage
-            cell.productImageView.image = loadImage(url: product.imageUrl)
+//            cell.productImageView.image = loadImage(url: product.imageUrl)
 
             // title
             cell.titleLabel.text = product.title

@@ -25,6 +25,7 @@ class CategoriesViewController: UIViewController {
         
         categoriesTableView.dataSource = self
         categoriesTableView.delegate = self
+        
         products!.requestProducts(actionOnResponse: {isValidResponse in
             DispatchQueue.main.async {
                 if(isValidResponse){
@@ -47,12 +48,12 @@ class CategoriesViewController: UIViewController {
 
 extension CategoriesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return products?.categories.count ?? 0
+        return products?.categories?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = products?.categories[indexPath.row]
+        cell.textLabel?.text = products?.categories?[indexPath.row]
         return cell
     }
     
@@ -62,9 +63,11 @@ extension CategoriesViewController : UITableViewDataSource {
 extension CategoriesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath), let cellText = cell.textLabel?.text {
-            selectedCategory = cellText
-            performSegue(withIdentifier: segueId, sender: self)
+        selectedCategory = products?.categories?[indexPath.row]
+        DispatchQueue.main.async { [weak self] in
+            if let segue = self?.segueId {
+                self?.performSegue(withIdentifier: segue, sender: self)
+            }
         }
     }
     

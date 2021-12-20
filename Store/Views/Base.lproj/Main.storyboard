@@ -281,11 +281,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nLp-k7-aGz">
-                                <rect key="frame" x="0.0" y="44" width="414" height="771"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nLp-k7-aGz">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="S3k-TF-2Gd">
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="S3k-TF-2Gd">
                                     <size key="itemSize" width="184" height="183"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -306,6 +305,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9yy-9q-ZtC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nLp-k7-aGz" firstAttribute="trailing" secondItem="9yy-9q-ZtC" secondAttribute="trailing" id="1xh-T9-mKP"/>
+                            <constraint firstItem="nLp-k7-aGz" firstAttribute="top" secondItem="Z5a-Ba-QCn" secondAttribute="top" id="qH7-y4-EbD"/>
+                            <constraint firstAttribute="bottom" secondItem="nLp-k7-aGz" secondAttribute="bottom" id="ql8-kd-kaH"/>
+                            <constraint firstItem="nLp-k7-aGz" firstAttribute="leading" secondItem="9yy-9q-ZtC" secondAttribute="leading" id="ve0-zh-TmV"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="eav-AK-VwH"/>
                     <connections>

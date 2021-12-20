@@ -34,17 +34,7 @@ class ProductsModel{
     }
     
     
-    var categories : [String]{
-        get{
-            var categoriesSet = Set<String>()
-            if let productsArray = products {
-                for product in productsArray {
-                    categoriesSet.insert(product.type ?? "misc")
-                }
-            }
-            return categoriesSet.map{$0}
-        }
-    }
+    var categories : [String]?
     
     
     init(){
@@ -58,6 +48,7 @@ class ProductsModel{
     
     
     @objc func changeIsSelected(_ notification: Notification){
+        
         guard let productId = notification.userInfo?.first?.key as? String else { return }
         guard products != nil, let index = products?.firstIndex(where: {$0.id == productId}) else { return }
         
@@ -96,6 +87,7 @@ class ProductsModel{
                 if let safeData = data {
                     do {
                         self.products = try JSONDecoder().decode([Product].self, from: safeData)
+                        self.categories = Array(Set(self.products?.map({$0.type ?? ""}) ?? []))
                     } catch {
                         print("Error while trying to decode products: \(error)")
                     }
@@ -120,12 +112,12 @@ class ProductsModel{
     }
     
     
-    func getSelectedProducts()->[Product]? {
+    func getProducts(bySelection isSelected : Bool?)->[Product]? {
         guard products != nil else { return nil }
         var selectedProducts = [Product]()
         
         for product in products! {
-            if let _ = product.isSelected {
+            if product.isSelected == isSelected {
                 selectedProducts.append(product)
             }
         }
