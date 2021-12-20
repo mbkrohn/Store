@@ -9,13 +9,15 @@ import UIKit
 
 class FavoritesTableViewController: UITableViewController {
 
-    var cart : Cart?
-    var cartIterator : Set<Product>.Iterator?
+    //var cart : Cart?
+    //var cartIterator : Set<Product>.Iterator?
+    var productModel : ProductsModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        cart = (UIApplication.shared.delegate as! AppDelegate).cart
+        productModel = (UIApplication.shared.delegate as! AppDelegate).productsModel
+        //cart = (UIApplication.shared.delegate as! AppDelegate).cart
         
 //        let p1 = Product(id: "firstp", title: "FirstP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
 //        let p2 = Product(id: "secondp", title: "SecondP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
@@ -38,28 +40,24 @@ class FavoritesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if let cart = cart {
-            return cart.shoppingCart.count
-        } else {
-            return 0
+        guard productModel != nil else { return 0 }
+        
+        if let count = productModel?.getSelectedProducts()?.count {
+            return count
         }
+        return 0
+        
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cartCell", for: indexPath)
-
-        if cartIterator == nil{
-            cartIterator = cart?.shoppingCart.makeIterator()
-        }
-
-        let product = cartIterator?.next()
+        var cellText = "No Product found"
         
-        let productTitle = product?.title
-        if productTitle != nil
-        {
-            cell.textLabel?.text = productTitle
+        if let product = productModel?.getSelectedProducts()?[indexPath.row], product.title != nil {
+           cellText  = product.title!
         }
+        cell.textLabel?.text  = cellText
         return cell
     }
     

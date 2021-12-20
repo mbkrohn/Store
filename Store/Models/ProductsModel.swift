@@ -119,6 +119,18 @@ class ProductsModel{
         return categoryProducts
     }
     
+    
+    func getSelectedProducts()->[Product]? {
+        guard products != nil else { return nil }
+        var selectedProducts = [Product]()
+        
+        for product in products! {
+            if let _ = product.isSelected {
+                selectedProducts.append(product)
+            }
+        }
+        return selectedProducts
+    }
     // MARK: - Private methods
     
     fileprivate func isValidStatusCode(statusCode: Int)-> Bool{

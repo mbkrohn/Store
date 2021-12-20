@@ -15,14 +15,17 @@ class CategoriesViewController: UIViewController {
     var selectedCategory : String?
     
     @IBOutlet var categoriesTableView: UITableView!
-    var products = ProductsModel()
+    var products : ProductsModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        products = (UIApplication.shared.delegate as! AppDelegate).productsModel
+        guard products != nil else { fatalError() }
+        
         categoriesTableView.dataSource = self
         categoriesTableView.delegate = self
-        products.requestProducts(actionOnResponse: {isValidResponse in
+        products!.requestProducts(actionOnResponse: {isValidResponse in
             DispatchQueue.main.async {
                 if(isValidResponse){
                     self.categoriesTableView.reloadData()
@@ -44,12 +47,12 @@ class CategoriesViewController: UIViewController {
 
 extension CategoriesViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return products.categories.count
+        return products?.categories.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = products.categories[indexPath.row]
+        cell.textLabel?.text = products?.categories[indexPath.row]
         return cell
     }
     
