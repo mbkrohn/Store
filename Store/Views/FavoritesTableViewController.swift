@@ -17,18 +17,7 @@ class FavoritesTableViewController: UITableViewController {
         super.viewDidLoad()
 
         productModel = (UIApplication.shared.delegate as! AppDelegate).productsModel
-        //cart = (UIApplication.shared.delegate as! AppDelegate).cart
-        
-//        let p1 = Product(id: "firstp", title: "FirstP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
-//        let p2 = Product(id: "secondp", title: "SecondP", type: nil, description: nil, filename: nil, height: nil, width: nil, price: nil, rating: nil, imageUrl: nil)
-//        cart?.addProduct(newProduct: p1)
-//        cart?.addProduct(newProduct: p2)
-//
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
@@ -46,7 +35,6 @@ class FavoritesTableViewController: UITableViewController {
             return count
         }
         return 0
-        
     }
 
     
@@ -62,6 +50,9 @@ class FavoritesTableViewController: UITableViewController {
     }
     
 
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
