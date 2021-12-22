@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 
 class ProductsCollectionViewController: UIViewController {
@@ -67,28 +68,8 @@ class ProductsCollectionViewController: UIViewController {
     
     private let numberOfItemPerRow = 3
 
-//    /*private*/ let screenWidth = UIScreen.main.bounds.width
-//    /*private*/ let sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-//    /*private*/ let minimumInteritemSpacing = CGFloat(10)
-//    /*private*/ let minimumLineSpacing = CGFloat(10)
-//
-//    // Calculate the item size based on the configuration above
-//    private var itemSize: CGSize {
-//        let interitemSpacesCount = numberOfItemPerRow - 1
-//        let interitemSpacingPerRow = minimumInteritemSpacing * CGFloat(interitemSpacesCount)
-//        let rowContentWidth = screenWidth - sectionInset.right - sectionInset.left - interitemSpacingPerRow
-//
-//        let width = rowContentWidth / CGFloat(numberOfItemPerRow)
-//        let height = width // feel free to change the height to whatever you want
-//
-//        return CGSize(width: width, height: height)
-//    }
-    
     fileprivate func setLayout() {
         let layout = UICollectionViewFlowLayout()
-        //layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-//        layout.minimumLineSpacing = 10
-//        layout.minimumInteritemSpacing = 10
         layout.itemSize = CGSize(width: (UIScreen.main.bounds.width - 20) / 3, height: 200)
         collectionView.collectionViewLayout = layout
     }
@@ -111,8 +92,9 @@ extension ProductsCollectionViewController : UICollectionViewDataSource{
             let product = productsArray[indexPath.row]
 
             // productImage
-//            cell.productImageView.image = loadImage(url: product.imageUrl)
-
+//           cell.productImageView.image = loadImage(url: product.imageUrl)
+            cell.productImageView.kf.setImage(with: URL(string: product.imageUrl!)!)
+             
             // title
             cell.titleLabel.text = product.title
 
